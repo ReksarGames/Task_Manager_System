@@ -1,0 +1,70 @@
+#logging:
+#  level:
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql.BasicBinder: trace
+#    org.springframework.jdbc.core.JdbcTemplate: debug
+#    org.springframework.transaction: debug
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
+#      springframework:
+#        security: DEBUG
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+    springframework:
+      security: DEBUG
+      jdbc:
+        JdbcTemplate: DEBUG
+      transaction: DEBUG
+
+spring:
+  profiles:
+    active: localDB
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+  datasource:
+    tomcat:
+      jdbc-interceptors: "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"
+
+server:
+  port: 8080
+
+---
+
+# Настройки для профиля localDB
+
+spring:
+  config:
+    activate:
+      on-profile: localDB
+  h2:
+    console:
+      enabled: true
+      settings:
+        trace: on
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: false
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
